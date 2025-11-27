@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Proyecto básico de Node.js con pruebas unitarias y end-to-end",
   "main": "src/server.js",
+  "type": "module",
   "scripts": {
     "start": "node src/server.js",
     "test": "jest --coverage",

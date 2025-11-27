@@ -1,4 +1,4 @@
-import express from 'express'
+import express from 'express';
 const app = express();
 const PORT = process.env.PORT || 4013;
 
@@ -7,14 +7,14 @@ app.use(express.json());
 
 // Rutas básicas
 app.get('/', (req, res) => {
-  res.status(200).json({ 
+  res.status(200).json({
     message: 'Servidor funcionando correctamente',
     timestamp: new Date().toISOString()
   });
 });
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
+  res.status(200).json({
     status: 'OK',
     uptime: process.uptime()
   });
@@ -30,16 +30,16 @@ app.get('/api/users', (req, res) => {
 
 app.post('/api/users', (req, res) => {
   const { name } = req.body;
-  
+
   if (!name) {
     return res.status(400).json({ error: 'El nombre es requerido' });
   }
-  
+
   const newUser = {
     id: Date.now(),
     name
   };
-  
+
   res.status(201).json(newUser);
 });
 
@@ -48,12 +48,9 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
-// Iniciar servidor solo si no estamos en modo de prueba
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-  });
-}
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
 
 export default app;
 
