@@ -1,6 +1,8 @@
+import 'dotenv/config';
 import express from 'express';
 const app = express();
 const PORT = process.env.PORT || 4013;
+const VALUE_TEST = process.env.VALUE_TEST;
 
 // Middleware
 app.use(express.json());
@@ -8,7 +10,7 @@ app.use(express.json());
 // Rutas básicas
 app.get('/', (req, res) => {
   res.status(200).json({
-    message: 'Servidor funcionando segunda prueba desplegandolo desde el github actions',
+    message: `funcionando segunda prueba desplegandolo desde el github actions ${VALUE_TEST}`,
     timestamp: new Date().toISOString()
   });
 });

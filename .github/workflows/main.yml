@@ -5,11 +5,10 @@ name: Despliegue de aplicación en javascript
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: self-hosted
 
     strategy:
@@ -18,12 +17,28 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm i
-    - run: npm run build --if-present
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm i
+      - run: npm run build --if-present
+      - name: Run application
+        env:
+          PORT: 4013
+          VALUE_TEST: ${{ vars.VALUE_TEST }}
+        run: |
+          # Verificar si la aplicación ya está corriendo en PM2
+          if pm2 describe prueba_github_actions > /dev/null 2>&1; then
+            echo "La aplicación ya existe en PM2, reiniciando..."
+            pm2 restart prueba_github_actions --update-env
+          else
+            echo "La aplicación no existe en PM2, iniciando..."
+            pm2 start src/server.js --name "prueba_github_actions"
+          fi
+          
+          # Guardar la configuración de PM2
+          pm2 save
     # - run: npm test
