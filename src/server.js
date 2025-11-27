@@ -8,7 +8,7 @@ app.use(express.json());
 // Rutas básicas
 app.get('/', (req, res) => {
   res.status(200).json({
-    message: 'Servidor funcionando correctamente',
+    message: 'Servidor funcionando segunda prueba desplegandolo desde el github actions',
     timestamp: new Date().toISOString()
   });
 });
