@@ -15,7 +15,10 @@ jobs:
     strategy:
       matrix:
         node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    env:
+      PORT: 4013
+      VALUE_TEST: ${{ vars.VALUE_TEST }}
 
     steps:
       - uses: actions/checkout@v4
@@ -24,12 +27,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: npm i
+      - run: npm ci
       - run: npm run build --if-present
       - name: Run application
-        env:
-          PORT: 4013
-          VALUE_TEST: ${{ vars.VALUE_TEST }}
         run: |
           # Verificar si la aplicación ya está corriendo en PM2
           if pm2 describe prueba_github_actions > /dev/null 2>&1; then
@@ -39,7 +39,7 @@ jobs:
             echo "La aplicación no existe en PM2, iniciando..."
             pm2 start src/server.js --name "prueba_github_actions"
           fi
-          
+
           # Guardar la configuración de PM2
           pm2 save
     # - run: npm test
